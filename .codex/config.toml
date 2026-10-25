@@ -1,0 +1,38 @@
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[tui]
+status_line = [
+  "model-with-reasoning",
+  "current-dir",
+  "git-branch",
+  "context-remaining",
+  "five-hour-limit",
+  "weekly-limit",
+  "fast-mode",
+]
+
+[features]
+multi_agent = true
+hooks = true
+default_mode_request_user_input = true
+
+[[hooks.Stop]]
+
+[[hooks.Stop.hooks]]
+type = "command"
+command = 'bash "$(git rev-parse --show-toplevel)/.agents/hooks/stop-hook.sh"'
+timeout = 120
+statusMessage = "Running stop checks"
+
+[mcp_servers.context7]
+command = "pnpm"
+args = ["dlx", "@upstash/context7-mcp"]
+default_tools_approval_mode = "approve"
+
+[mcp_servers.chrome-devtools]
+command = "pnpm"
+args = ["dlx", "chrome-devtools-mcp@latest", "--browser-url=http://127.0.0.1:9222"]
+
+[mcp_servers.chrome-devtools.tools.take_snapshot]
+approval_mode = "approve"
