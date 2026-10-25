@@ -1,0 +1,4 @@
+[tools]
+node = "24.22.0"
+claude = "2.1.302"
+"npm:@openai/codex" = "0.163.0"

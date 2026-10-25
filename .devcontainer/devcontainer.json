@@ -1,0 +1,40 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+  "name": "Location Scouter 3D DevContainer",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "options": ["--network=host"]
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1.1.0": {}
+  },
+  // 5173: frontend(dev)
+  // 4173: frontend(preview)
+  "forwardPorts": [5173, 4173],
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "runArgs": ["--network=host"],
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["oderwat.indent-rainbow", "oxc.oxc-vscode"]
+    }
+  },
+  "mounts": [
+    // Claude Code設定の永続化
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+    // Claude Codeプラグイン状態はコンテナごとに分離する
+    "source=location-scouter-3d-claude-plugins,target=/home/vscode/.claude/plugins,type=volume",
+    "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached",
+    // Codexの認証情報・セッション・履歴の永続化（ホストと同期）
+    "source=${localEnv:HOME}/.codex,target=/home/vscode/.codex,type=bind,consistency=cached"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
+    "LANG": "ja_JP.UTF-8",
+    "LC_ALL": "ja_JP.UTF-8"
+  },
+  "containerUser": "vscode"
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Asia/Tokyo",
+  "schedule": ["* 0-11 * * 6"],
+  "updateNotScheduled": false,
+  "dependencyDashboard": true,
+  "prConcurrentLimit": 99,
+  "minimumReleaseAge": "7 days",
+  "enabledManagers": ["devcontainer", "mise", "npm", "dockerfile"],
+  "packageRules": [
+    {
+      "description": "Keep npm dependency versions exact",
+      "matchManagers": ["npm"],
+      "rangeStrategy": "pin",
+    },
+    {
+      "description": "Group devcontainer minor and patch updates",
+      "matchManagers": ["devcontainer", "dockerfile"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "devcontainers minor and patch",
+      "groupSlug": "devcontainers-minor-and-patch",
+    },
+    {
+      "description": "Group mise minor and patch updates",
+      "matchManagers": ["mise"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "mise minor and patch",
+      "groupSlug": "mise-minor-and-patch",
+    },
+    {
+      "description": "Group Vitest major updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["vitest", "@vitest/*"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "vitest",
+      "groupSlug": "vitest",
+    },
+    {
+      "description": "Group npm minor and patch updates",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "npm minor and patch",
+      "groupSlug": "npm-minor-and-patch",
+    },
+  ],
+}
