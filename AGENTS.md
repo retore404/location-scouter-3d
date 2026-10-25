@@ -24,6 +24,12 @@ Location Scouter 3D is a web app for scouting photo locations on a 3D map built 
 - Write Japanese comments for responsibilities, constraints, design reasons, or side effects that are not clear from the function's name, types, and implementation.
 - Direct commits/pushes to the `main` branch are prohibited.
 
+## Spec-Driven Development
+
+- Specs and change proposals are managed with OpenSpec under `openspec/` (`specs/` for current behavior, `changes/` for proposed changes).
+- Start feature work and behavior changes with an OpenSpec change (`/opsx:propose` in Claude Code, `$openspec-propose` in Codex), then implement with `openspec-apply-change` and finish with `openspec-archive-change`.
+- Write OpenSpec artifacts in Japanese, keeping OpenSpec structural headings and SHALL/MUST keywords in English (configured in `openspec/config.yaml`).
+
 ## Investigation Policy
 
 - When investigating and explaining problems caused by library version upgrades, always check the changelog/release notes and state your findings based on facts, rather than making assumptions.
