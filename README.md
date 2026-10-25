@@ -4,7 +4,7 @@
 # 開発環境
 
 - 開発環境は DevContainer を使うことを前提としている。
-- Node.js / Claude Code / Codex は mise（`mise.toml`）、pnpm は `package.json#packageManager` で版数を固定する。
+- Node.js / Claude Code / Codex / OpenSpec は mise（`mise.toml`）、pnpm は `package.json#packageManager` で版数を固定する。
 - 依存パッケージは公開から7日以上経ったものだけを入れる（`minimumReleaseAge`）。npm/npx は使わず pnpm を使う。
 
 ## コマンド
