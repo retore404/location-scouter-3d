@@ -8,7 +8,7 @@ Location Scouter 3D is a web app for scouting photo locations on a 3D map built 
 
 ## Project Structure
 
-- `frontend`: Frontend web app (not created yet)
+- `frontend`: Frontend web app (Vite + React + TypeScript + CesiumJS)
 - `tools/*`: Data preparation tools such as PLATEAU data conversion (not created yet)
 
 ## Communication
