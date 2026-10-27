@@ -183,3 +183,39 @@ describe("データ取得の失敗", () => {
     });
   });
 });
+
+describe("画角枠", () => {
+  test("アプリを開いた直後は、どの焦点距離も表示しない", () => {
+    expect(initialAppState.shownFocalLengths).toEqual([]);
+  });
+
+  test("複数の焦点距離を選べ、定番の順に並ぶ", () => {
+    const state = run(
+      { type: "toggleFocalLength", focalLength: 85 },
+      { type: "toggleFocalLength", focalLength: 24 },
+    );
+    expect(state.shownFocalLengths).toEqual([24, 85]);
+  });
+
+  test("選んだ焦点距離をもう一度切り替えると外れる", () => {
+    const state = run(
+      { type: "toggleFocalLength", focalLength: 50 },
+      { type: "toggleFocalLength", focalLength: 35 },
+      { type: "toggleFocalLength", focalLength: 50 },
+    );
+    expect(state.shownFocalLengths).toEqual([35]);
+  });
+
+  test("一人称モードでも切り替えられ、俯瞰モードに戻っても保たれる", () => {
+    const firstPerson = run(
+      { type: "selectTool", tool: "viewpoint" },
+      { type: "placeAt", position: tokyo },
+      { type: "viewpointGroundHeightResolved", position: tokyo, groundHeight: 40 },
+      { type: "enterFirstPerson" },
+      { type: "toggleFocalLength", focalLength: 24 },
+    );
+    expect(firstPerson.shownFocalLengths).toEqual([24]);
+    const back = appReducer(firstPerson, { type: "exitFirstPerson" });
+    expect(back.shownFocalLengths).toEqual([24]);
+  });
+});

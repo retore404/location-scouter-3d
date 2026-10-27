@@ -7,6 +7,7 @@ import {
   setBurstHeight,
 } from "../domain/firework";
 import type { GeoPoint } from "../domain/geoPoint";
+import { FOCAL_LENGTHS, type FocalLength } from "../domain/lens";
 import { type Viewpoint, createViewpoint } from "../domain/viewpoint";
 import { assertNever } from "../assertNever";
 
@@ -24,6 +25,8 @@ export type AppState = {
   readonly fireworks: readonly Firework[];
   /** 花火の id を払い出すための通し番号。削除しても再利用しない。 */
   readonly fireworkSequence: number;
+  /** 画角枠を表示する焦点距離。FOCAL_LENGTHS の順に並べる。 */
+  readonly shownFocalLengths: readonly FocalLength[];
   readonly loadErrors: Readonly<Partial<Record<DataSource, string>>>;
 };
 
@@ -33,6 +36,7 @@ export const initialAppState: AppState = {
   viewpoint: null,
   fireworks: [],
   fireworkSequence: 0,
+  shownFocalLengths: [],
   loadErrors: {},
 };
 
@@ -48,6 +52,7 @@ export type AppAction =
   | { type: "updateBurstDiameter"; id: string; burstDiameter: number }
   | { type: "fireworkGroundHeightResolved"; id: string; launchSite: GeoPoint; groundHeight: number }
   | { type: "removeFirework"; id: string }
+  | { type: "toggleFocalLength"; focalLength: FocalLength }
   | { type: "enterFirstPerson" }
   | { type: "exitFirstPerson" }
   | { type: "reportLoadError"; source: DataSource; message: string };
@@ -108,6 +113,11 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       );
     case "removeFirework":
       return { ...state, fireworks: state.fireworks.filter(({ id }) => id !== action.id) };
+    case "toggleFocalLength":
+      return {
+        ...state,
+        shownFocalLengths: toggleFocalLength(state.shownFocalLengths, action.focalLength),
+      };
     case "enterFirstPerson":
       return canEnterFirstPerson(state) ? { ...state, mode: "firstPerson", tool: "none" } : state;
     case "exitFirstPerson":
@@ -154,6 +164,17 @@ function updateFirework(
       firework.id === id ? update(firework) : firework,
     ),
   };
+}
+
+// 操作の順番によらず、画角枠の表示の順番が一定になるよう、定番の順に並べ直す。
+function toggleFocalLength(
+  shown: readonly FocalLength[],
+  focalLength: FocalLength,
+): readonly FocalLength[] {
+  const next = shown.includes(focalLength)
+    ? shown.filter((shownFocalLength) => shownFocalLength !== focalLength)
+    : [...shown, focalLength];
+  return FOCAL_LENGTHS.filter((candidate) => next.includes(candidate));
 }
 
 function samePoint(a: GeoPoint, b: GeoPoint): boolean {

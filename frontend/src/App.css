@@ -217,6 +217,44 @@ button:disabled {
   pointer-events: none;
 }
 
+.focal-length-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 6px;
+}
+
+/* 画角枠の重ね表示は、一人称モードのドラッグ操作を妨げないよう、入力を下の地図へ通す。 */
+.lens-frames {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 枠は画面の中央（= 視線の中心）を中心に置く。色は要素の color で焦点距離ごとに指定する。 */
+.lens-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 2px solid currentColor;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+  transform: translate(-50%, -50%);
+}
+
+.lens-frame-label {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+}
+
 /* 狭い画面では、パネルを地図の下部に置き、折りたためるようにする。 */
 @media (max-width: 767px) {
   .app {
