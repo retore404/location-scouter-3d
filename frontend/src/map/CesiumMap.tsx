@@ -151,7 +151,7 @@ export function CesiumMap({ state, dispatch, onViewDirectionChange }: Props) {
     if (!mapViewer || state.mode !== "firstPerson") {
       return undefined;
     }
-    const { viewpoint, fireworks } = stateRef.current;
+    const { viewpoint, fireworks, shownFocalLengths } = stateRef.current;
     const position = viewpoint ? viewpointPosition(viewpoint) : undefined;
     if (!position) {
       return undefined;
@@ -161,6 +161,7 @@ export function CesiumMap({ state, dispatch, onViewDirectionChange }: Props) {
       mapViewer.viewer,
       position,
       nearest ? directionTo(position, nearest.center) : DEFAULT_DIRECTION,
+      shownFocalLengths,
       onViewDirectionChange,
     );
     firstPersonRef.current = controller;
@@ -177,6 +178,11 @@ export function CesiumMap({ state, dispatch, onViewDirectionChange }: Props) {
       firstPersonRef.current?.moveTo(position);
     }
   }, [state.viewpoint]);
+
+  // 一人称モード中に画角枠の焦点距離が変わったら、視野を決め直す。
+  useEffect(() => {
+    firstPersonRef.current?.setFocalLengths(state.shownFocalLengths);
+  }, [state.shownFocalLengths]);
 
   return <div ref={containerRef} className="cesium-map" />;
 }

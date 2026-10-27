@@ -4,6 +4,8 @@ import { CesiumMap } from "./map/CesiumMap";
 import { appReducer, initialAppState } from "./state/appState";
 import { DirectionIndicator } from "./ui/DirectionIndicator";
 import { FireworkList } from "./ui/FireworkList";
+import { LensFramePicker } from "./ui/LensFramePicker";
+import { LensFrames } from "./ui/LensFrames";
 import { ModeControls } from "./ui/ModeControls";
 import { Notices } from "./ui/Notices";
 import { ViewpointEditor } from "./ui/ViewpointEditor";
@@ -17,6 +19,7 @@ export function App() {
     <div className="app">
       <div className="map-area">
         <CesiumMap state={state} dispatch={dispatch} onViewDirectionChange={setDirection} />
+        {state.mode === "firstPerson" && <LensFrames focalLengths={state.shownFocalLengths} />}
         {state.mode === "firstPerson" && direction && <DirectionIndicator direction={direction} />}
         <Notices loadErrors={state.loadErrors} />
       </div>
@@ -37,6 +40,7 @@ export function App() {
           <ModeControls state={state} dispatch={dispatch} />
           <ViewpointEditor viewpoint={state.viewpoint} dispatch={dispatch} />
           <FireworkList fireworks={state.fireworks} dispatch={dispatch} />
+          <LensFramePicker shownFocalLengths={state.shownFocalLengths} dispatch={dispatch} />
         </div>
       </aside>
     </div>
